@@ -2,21 +2,32 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Plus, Search, Volume2, Trash2 } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Plus, Search, Volume2, Trash2, Palette } from "lucide-react";
 
 const initialHighlights = [
-  "abusad*",
-  "apost*", 
-  "baleia*",
-  "boca*",
-  "bolsonaro*",
-  "bolud*",
-  "burr*",
-  "cala boc*",
-  "chá*",
-  "comia*",
-  "dentr*",
-  "dentro"
+  { word: "abusad*", color: "#ef4444", soundEnabled: false },
+  { word: "apost*", color: "#ef4444", soundEnabled: false }, 
+  { word: "baleia*", color: "#ef4444", soundEnabled: false },
+  { word: "boca*", color: "#ef4444", soundEnabled: false },
+  { word: "bolsonaro*", color: "#ef4444", soundEnabled: false },
+  { word: "bolud*", color: "#ef4444", soundEnabled: false },
+  { word: "burr*", color: "#ef4444", soundEnabled: false },
+  { word: "cala boc*", color: "#ef4444", soundEnabled: false },
+  { word: "chá*", color: "#ef4444", soundEnabled: false },
+  { word: "comia*", color: "#ef4444", soundEnabled: false },
+  { word: "dentr*", color: "#ef4444", soundEnabled: false },
+  { word: "dentro", color: "#ef4444", soundEnabled: false }
+];
+
+const colorOptions = [
+  "#ef4444", // red
+  "#f97316", // orange
+  "#eab308", // yellow
+  "#22c55e", // green
+  "#3b82f6", // blue
+  "#a855f7", // purple
+  "#ec4899", // pink
 ];
 
 export function HighlightsPage() {
@@ -25,18 +36,30 @@ export function HighlightsPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const addHighlight = () => {
-    if (newWord.trim() && !highlights.includes(newWord.trim())) {
-      setHighlights([...highlights, newWord.trim()]);
+    if (newWord.trim() && !highlights.some(h => h.word === newWord.trim())) {
+      setHighlights([...highlights, { word: newWord.trim(), color: "#ef4444", soundEnabled: false }]);
       setNewWord("");
     }
   };
 
-  const removeHighlight = (word: string) => {
-    setHighlights(highlights.filter(h => h !== word));
+  const removeHighlight = (wordToRemove: string) => {
+    setHighlights(highlights.filter(h => h.word !== wordToRemove));
   };
 
-  const filteredHighlights = highlights.filter(word =>
-    word.toLowerCase().includes(searchTerm.toLowerCase())
+  const updateHighlightColor = (word: string, color: string) => {
+    setHighlights(highlights.map(h => 
+      h.word === word ? { ...h, color } : h
+    ));
+  };
+
+  const toggleSound = (word: string) => {
+    setHighlights(highlights.map(h => 
+      h.word === word ? { ...h, soundEnabled: !h.soundEnabled } : h
+    ));
+  };
+
+  const filteredHighlights = highlights.filter(highlight =>
+    highlight.word.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -103,27 +126,53 @@ export function HighlightsPage() {
         {/* Highlights List */}
         <Card className="p-6 bg-card border border-extension-border shadow-card-extension">
           <div className="space-y-2 max-h-96 overflow-y-auto">
-            {filteredHighlights.map((word, index) => (
+            {filteredHighlights.map((highlight, index) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-extension-border/50 hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-extension-red rounded-full"></div>
-                  <span className="text-foreground font-medium">{word}</span>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button 
+                        className="w-6 h-6 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform cursor-pointer"
+                        style={{ backgroundColor: highlight.color }}
+                      >
+                        <Palette className="h-3 w-3 text-white opacity-0 hover:opacity-100 transition-opacity m-auto" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-48 p-3">
+                      <div className="grid grid-cols-4 gap-2">
+                        {colorOptions.map((color) => (
+                          <button
+                            key={color}
+                            className="w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform"
+                            style={{ backgroundColor: color }}
+                            onClick={() => updateHighlightColor(highlight.word, color)}
+                          />
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  <span className="text-foreground font-medium">{highlight.word}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-8 w-8 p-0 hover:bg-muted"
+                    onClick={() => toggleSound(highlight.word)}
+                    className={`h-8 w-8 p-0 hover:bg-muted transition-colors ${
+                      highlight.soundEnabled 
+                        ? 'text-green-500 hover:text-green-600' 
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
                   >
                     <Volume2 className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => removeHighlight(word)}
+                    onClick={() => removeHighlight(highlight.word)}
                     className="h-8 w-8 p-0 hover:bg-destructive/20 hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
