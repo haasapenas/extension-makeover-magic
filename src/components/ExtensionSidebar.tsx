@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Settings, Eye, Users, Sliders } from "lucide-react";
+import { Settings, Eye, Users, Sliders, BarChart3 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -17,6 +17,7 @@ const menuItems = [
   { title: "Highlights", url: "/highlights", icon: Eye },
   { title: "Monitored Users", url: "/monitored-users", icon: Users },
   { title: "Modules", url: "/modules", icon: Sliders },
+  { title: "Statistics", url: "/statistics", icon: BarChart3 },
 ];
 
 export function ExtensionSidebar() {

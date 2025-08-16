@@ -9,6 +9,7 @@ import { MainDashboard } from "@/components/MainDashboard";
 import { HighlightsPage } from "@/components/HighlightsPage";
 import { MonitoredUsersPage } from "@/components/MonitoredUsersPage";
 import { ModulesPage } from "@/components/ModulesPage";
+import { StatisticsPage } from "@/components/StatisticsPage";
 import { Menu } from "lucide-react";
 import NotFound from "./pages/NotFound";
 
@@ -36,6 +37,7 @@ const App = () => (
                   <Route path="/highlights" element={<HighlightsPage />} />
                   <Route path="/monitored-users" element={<MonitoredUsersPage />} />
                   <Route path="/modules" element={<ModulesPage />} />
+                  <Route path="/statistics" element={<StatisticsPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
