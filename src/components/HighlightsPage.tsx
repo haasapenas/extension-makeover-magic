@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ColorPicker } from "@/components/ColorPicker";
 import { Plus, Search, Volume2, Trash2, Palette } from "lucide-react";
 
 const initialHighlights = [
@@ -34,6 +35,7 @@ export function HighlightsPage() {
   const [highlights, setHighlights] = useState(initialHighlights);
   const [newWord, setNewWord] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [colorPickerOpen, setColorPickerOpen] = useState<string | null>(null);
 
   const addHighlight = () => {
     if (newWord.trim() && !highlights.some(h => h.word === newWord.trim())) {
@@ -132,26 +134,24 @@ export function HighlightsPage() {
                 className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-extension-border/50 hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Popover>
+                  <Popover 
+                    open={colorPickerOpen === highlight.word} 
+                    onOpenChange={(open) => setColorPickerOpen(open ? highlight.word : null)}
+                  >
                     <PopoverTrigger asChild>
                       <button 
-                        className="w-6 h-6 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform cursor-pointer"
+                        className="w-6 h-6 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform cursor-pointer relative group"
                         style={{ backgroundColor: highlight.color }}
                       >
-                        <Palette className="h-3 w-3 text-white opacity-0 hover:opacity-100 transition-opacity m-auto" />
+                        <Palette className="h-3 w-3 text-white opacity-0 group-hover:opacity-100 transition-opacity absolute inset-0 m-auto" />
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-48 p-3">
-                      <div className="grid grid-cols-4 gap-2">
-                        {colorOptions.map((color) => (
-                          <button
-                            key={color}
-                            className="w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform"
-                            style={{ backgroundColor: color }}
-                            onClick={() => updateHighlightColor(highlight.word, color)}
-                          />
-                        ))}
-                      </div>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <ColorPicker
+                        color={highlight.color}
+                        onColorChange={(color) => updateHighlightColor(highlight.word, color)}
+                        onClose={() => setColorPickerOpen(null)}
+                      />
                     </PopoverContent>
                   </Popover>
                   <span className="text-foreground font-medium">{highlight.word}</span>
