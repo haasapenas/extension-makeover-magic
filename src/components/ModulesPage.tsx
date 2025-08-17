@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ShortcutsManager } from "@/components/ShortcutsManager";
 
 interface ModuleSettings {
   replyMode: boolean;
@@ -131,6 +132,11 @@ export function ModulesPage() {
             enabled={settings.hideAvatars}
             onToggle={(value) => updateSetting('hideAvatars', value)}
           />
+        </div>
+
+        {/* Shortcuts Section */}
+        <div className="mt-8">
+          <ShortcutsManager />
         </div>
 
         {/* Footer */}
