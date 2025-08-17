@@ -8,6 +8,7 @@ import { ExtensionSidebar } from "@/components/ExtensionSidebar";
 import { MainDashboard } from "@/components/MainDashboard";
 import { HighlightsPage } from "@/components/HighlightsPage";
 import { MonitoredUsersPage } from "@/components/MonitoredUsersPage";
+import { QuickRepliesPage } from "@/components/QuickRepliesPage";
 import { ModulesPage } from "@/components/ModulesPage";
 import { StatisticsPage } from "@/components/StatisticsPage";
 import { Menu } from "lucide-react";
@@ -36,6 +37,7 @@ const App = () => (
                   <Route path="/" element={<MainDashboard />} />
                   <Route path="/highlights" element={<HighlightsPage />} />
                   <Route path="/monitored-users" element={<MonitoredUsersPage />} />
+                  <Route path="/quick-replies" element={<QuickRepliesPage />} />
                   <Route path="/modules" element={<ModulesPage />} />
                   <Route path="/statistics" element={<StatisticsPage />} />
                   <Route path="*" element={<NotFound />} />
