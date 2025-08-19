@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Settings, Eye, Users, Sliders, BarChart3, MessageSquare } from "lucide-react";
+import { Settings, Eye, Users, Sliders, BarChart3, MessageSquare, ScrollText } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -18,6 +18,7 @@ const menuItems = [
   { title: "Monitored Users", url: "/monitored-users", icon: Users },
   { title: "Quick Replies", url: "/quick-replies", icon: MessageSquare },
   { title: "Modules", url: "/modules", icon: Sliders },
+  { title: "Logs", url: "/logs", icon: ScrollText },
   { title: "Statistics", url: "/statistics", icon: BarChart3 },
 ];
 

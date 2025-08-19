@@ -10,6 +10,7 @@ import { HighlightsPage } from "@/components/HighlightsPage";
 import { MonitoredUsersPage } from "@/components/MonitoredUsersPage";
 import { QuickRepliesPage } from "@/components/QuickRepliesPage";
 import { ModulesPage } from "@/components/ModulesPage";
+import { LogsPage } from "@/components/LogsPage";
 import { StatisticsPage } from "@/components/StatisticsPage";
 import { Menu } from "lucide-react";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
                   <Route path="/monitored-users" element={<MonitoredUsersPage />} />
                   <Route path="/quick-replies" element={<QuickRepliesPage />} />
                   <Route path="/modules" element={<ModulesPage />} />
+                  <Route path="/logs" element={<LogsPage />} />
                   <Route path="/statistics" element={<StatisticsPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
