@@ -1,38 +1,35 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Trash2, Shield, MessageSquare, User } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Trash2, Shield } from "lucide-react";
 
 interface ModerationLog {
   id: string;
+  date: string;
+  user: string;
+  message: string;
   action: string;
-  target: string;
-  reason: string;
-  timestamp: Date;
   moderator: string;
-  type: "comment" | "user" | "video";
 }
 
 export function LogsPage() {
   const [logs, setLogs] = useState<ModerationLog[]>([
     {
       id: "1",
-      action: "Comment Deleted",
-      target: "User comment on 'Sample Video'",
-      reason: "Spam content",
-      timestamp: new Date("2024-01-15T10:30:00"),
-      moderator: "Admin",
-      type: "comment"
+      date: "19/08/2025, 01:16:30",
+      user: "accounttest",
+      message: "e",
+      action: "Timeout (10 segundos.)",
+      moderator: "Haasapenas"
     },
     {
-      id: "2", 
-      action: "User Warned",
-      target: "@problematic_user",
-      reason: "Multiple policy violations",
-      timestamp: new Date("2024-01-15T09:15:00"),
-      moderator: "Moderator1",
-      type: "user"
+      id: "2",
+      date: "19/08/2025, 00:45:12", 
+      user: "problematic_user",
+      message: "spam content here",
+      action: "Comment Deleted",
+      moderator: "Moderator1"
     }
   ]);
 
@@ -40,49 +37,21 @@ export function LogsPage() {
     setLogs([]);
   };
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case "comment":
-        return <MessageSquare className="h-4 w-4" />;
-      case "user":
-        return <User className="h-4 w-4" />;
-      default:
-        return <Shield className="h-4 w-4" />;
-    }
-  };
-
-  const getTypeBadgeVariant = (type: string) => {
-    switch (type) {
-      case "comment":
-        return "secondary";
-      case "user":
-        return "destructive";
-      default:
-        return "default";
-    }
-  };
-
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Moderation Log</h1>
-          <p className="text-muted-foreground mt-1">
-            Track all moderation actions and decisions
-          </p>
-        </div>
+    <div className="p-6 space-y-6 bg-background min-h-screen">
+      <div className="flex items-center justify-between border-b border-extension-border pb-4">
+        <h1 className="text-3xl font-bold text-foreground">Moderation Log</h1>
         <Button 
           variant="destructive" 
           onClick={clearLogs}
           className="flex items-center gap-2"
         >
-          <Trash2 className="h-4 w-4" />
           Clear Logs
         </Button>
       </div>
 
       {logs.length === 0 ? (
-        <Card>
+        <Card className="bg-card">
           <CardContent className="flex items-center justify-center py-12">
             <div className="text-center">
               <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -91,43 +60,35 @@ export function LogsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-4">
-          {logs.map((log) => (
-            <Card key={log.id}>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-secondary rounded-lg">
-                      {getTypeIcon(log.type)}
-                    </div>
-                    <div>
-                      <CardTitle className="text-base">{log.action}</CardTitle>
-                      <CardDescription>{log.target}</CardDescription>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={getTypeBadgeVariant(log.type)}>
-                      {log.type}
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">
-                      {log.timestamp.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    <strong>Reason:</strong> {log.reason}
-                  </span>
-                  <span className="text-muted-foreground">
-                    <strong>Moderator:</strong> {log.moderator}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Card className="bg-card">
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-b border-extension-border">
+                  <TableHead className="text-muted-foreground font-medium">Date</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">User</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Message</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Action</TableHead>
+                  <TableHead className="text-muted-foreground font-medium">Moderator</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {logs.map((log) => (
+                  <TableRow 
+                    key={log.id} 
+                    className="border-b border-extension-border hover:bg-muted/50"
+                  >
+                    <TableCell className="text-foreground">{log.date}</TableCell>
+                    <TableCell className="text-foreground">{log.user}</TableCell>
+                    <TableCell className="text-foreground">{log.message}</TableCell>
+                    <TableCell className="text-foreground">{log.action}</TableCell>
+                    <TableCell className="text-foreground">{log.moderator}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
